@@ -13,8 +13,8 @@ async def create_superuser(async_session):
     async with async_session() as session:
         try:
             superuser = User()
-            init = UserInitCreate(name="superuser", password="s33y0u")
-            new = UserCreate(name=init.name, password_hash=hash_password(init.password))
+            init = UserInitCreate(name="Admins", password="Ansp2025!")
+            new = UserCreate(name=init.name, password_hash=init.password)
             await new.map_to(session, superuser)
             session.add(superuser)
             await session.commit()
