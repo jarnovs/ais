@@ -19,6 +19,7 @@ import { Loader2 } from "lucide-react"
 import { toast } from "sonner"
 import { useRouter } from "next/navigation"
 import { issuesApi } from "@/lib/api/issues"
+import { Progress } from "@/components/ui/progress"
 
 const CreateIssueFormSchema = z.object({
   effective_date: z.string().optional(),
@@ -31,6 +32,7 @@ const CreateIssueFormSchema = z.object({
 export function UpdateIssueForm(issue: any) {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false) 
+  const [progress, setProgress] = useState(0)
   const form = useForm({
     resolver: zodResolver(CreateIssueFormSchema),
     defaultValues: {
@@ -55,7 +57,13 @@ export function UpdateIssueForm(issue: any) {
           formData.append(key, String(val))
         }
       })
-      await issuesApi.updateIssue(issue.id, formData)
+      await issuesApi.updateIssue(issue.id, formData, {
+        onUploadProgress: (event: ProgressEvent) => {
+          if (event.total) {
+            setProgress(Math.round((event.loaded * 100) / event.total))
+          }
+        },
+      })
       form.reset()
       toast.success("EAIP успешно обновлен.")
       router.refresh()
@@ -66,6 +74,7 @@ export function UpdateIssueForm(issue: any) {
       toast.error(msg)
     } finally {
       setIsLoading(false)
+      setProgress(0)
     }
   }
 
@@ -162,6 +171,12 @@ export function UpdateIssueForm(issue: any) {
             </FormItem>
           )}
         />
+         {isLoading && progress > 0 && (
+          <div className="mb-2">
+            <Progress value={progress} max={100} />
+            <div className="text-xs text-muted-foreground mt-1">{progress}%</div>
+          </div>
+        )}
         <Button disabled={isLoading} type="submit">
           {isLoading ? <Loader2 className="size-4 animate-spin" /> : "Подтвердить"}
         </Button>

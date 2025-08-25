@@ -31,13 +31,14 @@ export const issuesApi = {
     return response.data;
   },
 
-  createIssue: async (data: any): Promise<Issue> => {
-    const response = await apiClient.post('/eaip_issues', data);
+  createIssue: async (data: any, config = {}) => {
+    const response = await apiClient.post("/eaip_issues/", data, config);
+    console.log(response)
     return response.data;
   },
 
-  updateIssue: async (id: number, data: any): Promise<Issue> => {
-    const response = await apiClient.patch(`/eaip_issues/${id}`, data);
+  updateIssue: async (id: number, data: any, config = {}) => {
+    const response = await apiClient.patch(`/eaip_issues/${id}`, data, config);
     return response.data;
   },
 
