@@ -1,0 +1,21 @@
+[project]
+name = "ais-backend"
+description = "AIS API"
+version = "0.1.0"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "aiofiles>=24.1.0",
+    "alembic>=1.16.4",
+    "asyncpg>=0.30.0",
+    "bcrypt>=4.3.0",
+    "fastapi>=0.116.1",
+    "httpx>=0.28.1",
+    "pydantic-settings>=2.10.1",
+    "pytest>=8.4.1",
+    "python-multipart>=0.0.20",
+    "pyyaml>=6.0.2",
+    "scalar-fastapi>=1.2.3",
+    "sqlalchemy>=2.0.41",
+    "uvicorn>=0.35.0",
+]
