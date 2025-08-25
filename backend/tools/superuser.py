@@ -6,6 +6,7 @@ from app.core import get_database, get_config
 from app.users.models import User
 from app.users.schemas import UserCreate, UserInitCreate
 from app.auth.models import AuthSession
+from app.users.utils import hash_password
 
 
 async def create_superuser(async_session):
@@ -13,7 +14,7 @@ async def create_superuser(async_session):
         try:
             superuser = User()
             init = UserInitCreate(name="superuser", password="s33y0u")
-            new = UserCreate(name=init.name, password_hash=init.password)
+            new = UserCreate(name=init.name, password_hash=hash_password(init.password))
             await new.map_to(session, superuser)
             session.add(superuser)
             await session.commit()
