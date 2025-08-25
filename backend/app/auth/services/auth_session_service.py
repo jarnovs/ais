@@ -28,7 +28,7 @@ class AuthSessionService(AuthModelService):
         user = await self.user_repo.get_full_by_name(data.username)
         if user is None:
             raise InvalidAuthData
-        if not await check_password(data.password, user.password_hash):
+        if not check_password(data.password, user.password_hash):
             raise InvalidAuthData
         return await self.repo.create(user)
 
