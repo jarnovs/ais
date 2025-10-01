@@ -33,7 +33,6 @@ export const issuesApi = {
 
   createIssue: async (data: any, config = {}) => {
     const response = await apiClient.post("/eaip_issues/", data, config);
-    console.log(response)
     return response.data;
   },
 
