@@ -2,8 +2,6 @@ import React from 'react'
 import IssueTable from './table'
 import { issuesApi } from '@/lib/api/issues'
 
-export const dynamic = 'force-dynamic';
-
 const Issues = async () => {
   const effective_issues = await issuesApi.getIssues("status=active")
   const future_issues = await issuesApi.getIssues("status=future")

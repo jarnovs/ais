@@ -1,5 +1,3 @@
-export const dynamic = 'force-dynamic';
-
 import React from 'react'
 import UsersTable from '@/components/users-table'
 import { Button } from '@/components/ui/button'
