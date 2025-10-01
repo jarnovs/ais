@@ -40,7 +40,7 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - ./nginx/dev.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx/stage.conf:/etc/nginx/conf.d/default.conf
       - media_uploads:/media
       - eaip_uploads:/eaip
     depends_on:
