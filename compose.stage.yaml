@@ -45,9 +45,21 @@ services:
       - eaip_uploads:/eaip
     depends_on:
       - backend
+      - frontend
     command: ["nginx", "-g", "daemon off;"]
     restart: unless-stopped
 
+  frontend:
+    build: frontend
+    container_name: front
+    depends_on:
+      - backend
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    env_file: ".env"
+    command: ["npm", "run", "start"]
+    
 volumes:
   media_uploads:
   eaip_uploads:
