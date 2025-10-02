@@ -53,7 +53,7 @@ services:
     build: 
       context: frontend
       args:
-        NODE_ENV: development
+        NODE_ENV: dev
     container_name: front
     depends_on:
       - backend
@@ -65,4 +65,4 @@ services:
 volumes:
   media_uploads:
   eaip_uploads:
-    pg_data:
+  pg_data:
