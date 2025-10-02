@@ -9,30 +9,16 @@ import {
   TableRow,
 } from "@/components/ui/table"
 
-import React, { useState, useEffect } from 'react'
-import { Issue, issuesApi } from "@/lib/api/issues"
+import React, { useEffect } from 'react'
+import { Issue } from "@/lib/api/issues"
 import DeleteIssueButton from "./delete-issue-button"
 import EditUserButton from "./edit-issue-button"
+import { useIssuesStore } from "@/store/issues-store"
 
 const IssuesTable = () => {
-  const [issues, setIssues] = useState<Issue[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  const { issues, loading, error, fetchIssues } = useIssuesStore()
 
   useEffect(() => {
-    const fetchIssues = async () => {
-      try {
-        const issueData = await issuesApi.getIssues()
-        setIssues(issueData)
-        console.log(issueData)
-      } catch (error) {
-        console.error('Error fetching issues:', error)
-        setError('Ошибка загрузки EAIP')
-      } finally {
-        setLoading(false)
-      }
-    }
-
     fetchIssues()
   }, [])
 

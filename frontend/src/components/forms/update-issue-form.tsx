@@ -17,9 +17,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useState } from "react"
 import { Loader2 } from "lucide-react"
 import { toast } from "sonner"
-import { useRouter } from "next/navigation"
 import { issuesApi } from "@/lib/api/issues"
 import { Progress } from "@/components/ui/progress"
+import { useIssuesStore } from "@/store/issues-store"
 
 const CreateIssueFormSchema = z.object({
   effective_date: z.string().optional(),
@@ -30,7 +30,7 @@ const CreateIssueFormSchema = z.object({
 })
 
 export function UpdateIssueForm(issue: any) {
-  const router = useRouter()
+  const { fetchIssues } = useIssuesStore()
   const [isLoading, setIsLoading] = useState(false) 
   const [progress, setProgress] = useState(0)
   const form = useForm({
@@ -66,7 +66,7 @@ export function UpdateIssueForm(issue: any) {
       })
       form.reset()
       toast.success("EAIP успешно обновлен.")
-      router.refresh()
+      await fetchIssues()
       
     } catch (error: any) {
       console.error("Ошибка отправки:", error)
