@@ -1,0 +1,68 @@
+services:
+  postgres:
+    image: postgres:17
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./backend/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - pg_data:/var/lib/postgresql/data
+    env_file: ".env"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $POSTGRES_USER -d $POSTGRES_DB"]
+      interval: 3s
+      timeout: 2s
+      retries: 20
+
+  backend:
+    build: backend
+    container_name: back
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+    env_file: ".env"
+    volumes:
+      - media_uploads:/build/media
+      - eaip_uploads:/build/eaip
+    command: bash -c "
+      uv run alembic upgrade head &&
+      uv run -m tools.superuser &&
+      uv run uvicorn app.main:app --host 0.0.0.0 --port 8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/stage.conf:/etc/nginx/conf.d/default.conf
+      - media_uploads:/media
+      - eaip_uploads:/eaip
+    depends_on:
+      - backend
+      - frontend
+    command: ["nginx", "-g", "daemon off;"]
+    restart: unless-stopped
+
+  frontend:
+    build: 
+      context: frontend
+      args:
+        NODE_ENV: development
+    container_name: front
+    depends_on:
+      - backend
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    command: ["npm", "run", "start"]
+    
+volumes:
+  media_uploads:
+  eaip_uploads:
+    pg_data:
