@@ -5,7 +5,11 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
-    "start": "next start"
+    "start": "next start",
+    "build-local": "cp .env .env.local && next build --turbopack",
+    "build-dev": "cp .env.development .env.local && next build --turbopack",
+    "build-test": "cp .env.test .env.local && next build --turbopack",
+    "build-prod": "cp .env.production .env.local && next build --turbopack"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.1",

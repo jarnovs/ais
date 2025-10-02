@@ -53,7 +53,7 @@ services:
     build: 
       context: frontend
       args:
-        NODE_ENV: production 
+        NODE_ENV: prod
     container_name: front
     depends_on:
       - backend
