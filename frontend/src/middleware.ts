@@ -4,7 +4,7 @@ import type { NextRequest } from 'next/server';
 async function verifyToken(token: string): Promise<boolean> {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_SITE_URL}/api/v1/auth`,
+      `${process.env.NEXT_INTERNAL_API_URL}/api/v1/auth`,
       {
         headers: {
           Cookie: `token=${token}`,
