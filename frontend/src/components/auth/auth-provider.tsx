@@ -1,20 +1,25 @@
 'use client';
 
-import { useEffect } from 'react';
+import { ReactNode, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 import { checkAuth, useIsAuthenticated } from '@/hooks/use-auth';
 
 interface AuthProviderProps {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const isAuthenticated = useIsAuthenticated();
+  const pathname = usePathname();
 
   useEffect(() => {
+    if (pathname === '/') return;
+
     if (!isAuthenticated) {
       checkAuth();
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, pathname]);
 
   return <>{children}</>;
 }
+ 
