@@ -36,7 +36,7 @@ export const issuesApi = {
       ...config,
       headers: {
         ...(config.headers || {}),
-        'Content-Type': undefined,
+        'Content-Type': 'multipart/form-data',
       },
     });
     return response.data;
@@ -47,7 +47,7 @@ export const issuesApi = {
       ...config,
       headers: {
         ...(config.headers || {}),
-        'Content-Type': undefined,
+        'Content-Type': 'multipart/form-data',
       },
     });
     return response.data;
