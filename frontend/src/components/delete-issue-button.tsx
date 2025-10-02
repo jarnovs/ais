@@ -13,17 +13,17 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { toast } from 'sonner'
-import { useRouter } from 'next/navigation'
 import { issuesApi } from '@/lib/api/issues'
+import { useIssuesStore } from '@/store/issues-store'
 
 interface DeleteIssueButtonProps {
   issueId: number; 
 }
 
 const DeleteIssueButton = ({ issueId }: DeleteIssueButtonProps) => {
+  const { fetchIssues } = useIssuesStore()
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const router = useRouter();
 
   const handleDelete = async () => {
     try {
@@ -31,7 +31,7 @@ const DeleteIssueButton = ({ issueId }: DeleteIssueButtonProps) => {
       await issuesApi.deleteIssue(issueId);
       toast.success("EAIP успешно удален");
       setIsOpen(false);
-      router.refresh();
+      await fetchIssues()
     } catch (error) {
       console.log(error);
       toast.error("Ошибка при удалении EAIP");
