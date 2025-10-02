@@ -8,36 +8,27 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { useUsersStore } from "@/store/users-store"
 import { AdminUser } from "@/lib/api/users"
-import { usersApi } from "@/lib/api/users"
 
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import DeleteUserButton from "./delete-user-button"
 import EditUserButton from "./edit-user-button"
 
 
 const UsersTable = () => {
-  const [users, setUsers] = useState<AdminUser[]>([])
-  const [loading, setLoading] = useState(true)
+  const { users, loading, error, fetchUsers } = useUsersStore()
 
   useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const userData = await usersApi.getUsers()
-        setUsers(userData)
-        console.log(userData)
-      } catch (error) {
-        console.error('Error fetching users:', error)
-      } finally {
-        setLoading(false)
-      }
-    }
-
     fetchUsers()
   }, [])
 
   if (loading) {
     return <div>Загрузка пользователей...</div>
+  }
+
+  if (error) {
+    return <div className="text-red-500">Ошибка: {error}</div>
   }
 
   return (

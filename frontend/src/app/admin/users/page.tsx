@@ -1,7 +1,9 @@
-import React from 'react'
+'use client'
+
+import React, { useState } from 'react'
 import UsersTable from '@/components/users-table'
 import { Button } from '@/components/ui/button'
-import { User, UserPlus } from 'lucide-react'
+import { UserPlus } from 'lucide-react'
 
 import {
   Dialog,

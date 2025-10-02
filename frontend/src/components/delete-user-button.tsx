@@ -13,18 +13,17 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { usersApi } from '@/lib/api/users'
-import { set } from 'zod'
+import { useUsersStore } from '@/store/users-store'
 import { toast } from 'sonner'
-import { useRouter } from 'next/navigation'
 
 interface DeleteUserButtonProps {
   userId: number; 
 }
 
 const DeleteUserButton = ({ userId }: DeleteUserButtonProps) => {
+  const { fetchUsers } = useUsersStore()
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const router = useRouter();
 
   const handleDelete = async () => {
     try {
@@ -32,7 +31,7 @@ const DeleteUserButton = ({ userId }: DeleteUserButtonProps) => {
       await usersApi.deleteUser(userId);
       toast.success("Пользователь успешно удален");
       setIsOpen(false);
-      router.refresh();
+      await fetchUsers()
     } catch (error) {
       console.log(error);
       toast.error("Ошибка при удалении пользователя");

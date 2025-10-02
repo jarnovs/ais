@@ -13,11 +13,11 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { AdminUser, UserFormData, usersApi } from "@/lib/api/users"
+import { AdminUser, usersApi } from "@/lib/api/users"
+import { useUsersStore } from "@/store/users-store"
 import { useState } from "react"
 import { Loader2 } from "lucide-react"
 import { toast } from "sonner"
-import { useRouter } from "next/navigation"
 
 
 const UpdateUserFormSchema = z.object({
@@ -26,7 +26,7 @@ const UpdateUserFormSchema = z.object({
 })
 
 export function UpdateUserForm(user: AdminUser) {
-  const router = useRouter()
+  const { fetchUsers } = useUsersStore()
   const [isLoading, setIsLoading] = useState(false) 
   const form = useForm<z.infer<typeof UpdateUserFormSchema>>({
     resolver: zodResolver(UpdateUserFormSchema),
@@ -46,7 +46,8 @@ export function UpdateUserForm(user: AdminUser) {
         await usersApi.updateUser(user.id, payload)
         form.reset()
         toast.success("Пользователь успешно обновлён")
-        router.refresh()
+        await fetchUsers()
+        
         setIsLoading(false)
     } catch (error: any) {
         console.log(error)
