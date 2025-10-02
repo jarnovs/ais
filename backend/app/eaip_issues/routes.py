@@ -107,9 +107,12 @@ async def update_issue(
         old_folder_dir = UPLOAD_DIR / issue.folder
         foldername = f"{effective_date}-AIRAC"
         new_folder_dir = UPLOAD_DIR / foldername 
-        os.rename(old_folder_dir, new_folder_dir)
-        issue.folder = foldername
-        issue.effective_date = effective_date
+        try:
+            os.rename(old_folder_dir, new_folder_dir)
+            issue.folder = foldername
+            issue.effective_date = effective_date
+        except:
+            raise FolderNameExistError
 
     if publication_date is not None:
         issue.publication_date = publication_date

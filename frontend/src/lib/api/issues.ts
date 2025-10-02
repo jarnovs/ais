@@ -31,13 +31,25 @@ export const issuesApi = {
     return response.data;
   },
 
-  createIssue: async (data: any, config = {}) => {
-    const response = await apiClient.post("/eaip_issues/", data, config);
+  createIssue: async (data: any, config: any = {}) => {
+    const response = await apiClient.post("/eaip_issues/", data, {
+      ...config,
+      headers: {
+        ...(config.headers || {}),
+        'Content-Type': undefined,
+      },
+    });
     return response.data;
   },
 
-  updateIssue: async (id: number, data: any, config = {}) => {
-    const response = await apiClient.patch(`/eaip_issues/${id}`, data, config);
+  updateIssue: async (id: number, data: any, config: any = {}) => {
+    const response = await apiClient.patch(`/eaip_issues/${id}`, data, {
+      ...config,
+      headers: {
+        ...(config.headers || {}),
+        'Content-Type': undefined,
+      },
+    });
     return response.data;
   },
 
