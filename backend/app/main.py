@@ -48,6 +48,7 @@ ALLOWED_ORIGINS = [
     "http://localhost",
     "http://localhost:3000",
     "http://127.0.0.1",
+    "http://192.168.0.105:3000",
     "http://127.0.0.1:3000",
     "http://ais.ansp.kg",
     "https://ais.ansp.kg",
