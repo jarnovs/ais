@@ -14,10 +14,10 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { usersApi } from "@/lib/api/users"
+import { useUsersStore } from "@/store/users-store"
 import { useState } from "react"
 import { Loader2 } from "lucide-react"
 import { toast } from "sonner"
-import { useRouter } from "next/navigation"
 
 const CreateUserFormSchema = z.object({
   name: z.string().min(6, {
@@ -28,8 +28,9 @@ const CreateUserFormSchema = z.object({
   }),
 })
 
+
 export function CreateUserForm() {
-  const router = useRouter()
+  const { fetchUsers } = useUsersStore()
   const [isLoading, setIsLoading] = useState(false) 
   const form = useForm<z.infer<typeof CreateUserFormSchema>>({
     resolver: zodResolver(CreateUserFormSchema),
@@ -45,7 +46,7 @@ export function CreateUserForm() {
         await usersApi.createUser(values)
         form.reset()
         toast.success("Пользователь успешно создан.")
-        router.refresh()
+        await fetchUsers()
         setIsLoading(false)
     } catch (error: any) {
         const msg = error.response?.data?.detail?.[0]?.msg || error.message
