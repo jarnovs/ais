@@ -1,3 +1,4 @@
+'use client'
 import {
   Table,
   TableBody,
@@ -10,14 +11,34 @@ import {
 import { AdminUser } from "@/lib/api/users"
 import { usersApi } from "@/lib/api/users"
 
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import DeleteUserButton from "./delete-user-button"
 import EditUserButton from "./edit-user-button"
 
 
-const UsersTable = async () => {
-  const users = await usersApi.getUsers()
-  console.log(users)
+const UsersTable = () => {
+  const [users, setUsers] = useState<AdminUser[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const userData = await usersApi.getUsers()
+        setUsers(userData)
+        console.log(userData)
+      } catch (error) {
+        console.error('Error fetching users:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchUsers()
+  }, [])
+
+  if (loading) {
+    return <div>Загрузка пользователей...</div>
+  }
 
   return (
     <Table>

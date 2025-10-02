@@ -19,7 +19,6 @@ import { Loader2 } from "lucide-react"
 import { toast } from "sonner"
 import { useRouter } from "next/navigation"
 import { issuesApi } from "@/lib/api/issues"
-import { apiClient } from "@/lib/api/api-client"
 import { Progress } from "@/components/ui/progress"
 
 

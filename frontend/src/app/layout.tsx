@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import "@/app/globals.css";
 
-import { Play } from 'next/font/google';
+import { Inter } from 'next/font/google';
 
-const play = Play({
+const inter = Inter({
   subsets: ['latin'], 
   weight: ['400', '700'],
 })
@@ -19,7 +19,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html className={play.className}>
+    <html className={inter.className}>
       <body>
         {children}
       </body>
