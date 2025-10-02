@@ -17,22 +17,22 @@ const IssueTable = memo(({ issues }: { issues: Issue[] }) => {
     <Table>
         <TableHeader>
           <TableRow> 
-            <TableHead className="text-center bg-[#F0F0F0] text-[#555555] font-bold border-1 border-[#999999]">Effective Date</TableHead>
-            <TableHead className="text-center bg-[#F0F0F0] text-[#555555] font-bold border-1 border-[#999999]">Publication Date</TableHead>
-            <TableHead className="text-center bg-[#F0F0F0] text-[#555555] font-bold border-1 border-[#999999]">Reason for Change</TableHead>
+            <TableHead className="text-center bg-[#F0F0F0] text-[#555555] font-bold border-1 border-[#999999] text-xs md:text-sm px-1 md:px-3 py-2">Effective Date</TableHead>
+            <TableHead className="text-center bg-[#F0F0F0] text-[#555555] font-bold border-1 border-[#999999] text-xs md:text-sm px-1 md:px-3 py-2">Publication Date</TableHead>
+            <TableHead className="text-center bg-[#F0F0F0] text-[#555555] font-bold border-1 border-[#999999] text-xs md:text-sm px-1 md:px-3 py-2">Reason for Change</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody className="text-center">
-          {issues.map((issue: any, index: number) => (
+          {issues.map((issue: any) => (
             <TableRow
               key={issue.id}
-              className={index % 2 === 0 ? "bg-white" : "bg-[#F0F0F0]"}
+              className="bg-white"
             >
-              <TableCell className="border border-[#999999] text-[#006588] font-bold underline">
+              <TableCell className="border border-[#999999] text-[#006588] font-bold underline text-xs md:text-sm px-1 md:px-3 py-1 md:py-2">
                 <a href={`/eaip/${issue.folder}/html`}>{issue.effective_date}</a>
               </TableCell>
-              <TableCell className="border border-[#999999]">{issue.publication_date}</TableCell>
-              <TableCell className="border border-[#999999]">{issue.reason_for_change}</TableCell>
+              <TableCell className="border border-[#999999] text-xs md:text-sm px-1 md:px-3 py-1 md:py-2">{issue.publication_date}</TableCell>
+              <TableCell className="border border-[#999999] text-xs md:text-sm px-1 md:px-3 py-1 md:py-2">{issue.reason_for_change}</TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -46,12 +46,12 @@ const IssuesCards = () => {
   const { data: future_issues, loading: loadingFuture, error: errorFuture } = useIssues("status=future");
 
   return (
-    <div className="flex flex-col gap-2 max-w-4xl p-4 md:p-4 mx-auto">
-      <h2 className="text-xl font-bold">Currently Effective Issue</h2>
+    <div className="flex flex-col gap-2 max-w-4xl p-2 md:p-4 mx-auto">
+      <h2 className="text-lg md:text-xl font-bold">Currently Effective Issue</h2>
       <IssueTable issues={effective_issues} />
-      <h2 className="text-xl font-bold mt-8">Future Issues</h2>
+      <h2 className="text-lg md:text-xl font-bold mt-4 md:mt-8">Future Issues</h2>
       <IssueTable issues={future_issues} />
-      <h2 className="text-xl font-bold mt-8">Archived Issues</h2>
+      <h2 className="text-lg md:text-xl font-bold mt-4 md:mt-8">Archived Issues</h2>
       <IssueTable issues={archived_issues} />
     </div>
   )
