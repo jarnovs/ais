@@ -20,9 +20,8 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(
     lifespan=lifespan,
-    title="Underground API",
-    description=("<code>/api/v1</code> для лендинга<br>"
-                 "<code>/api/v2</code> для CRM"),
+    title="AIS API",
+    description=("<code>/api/v1</code> - основная версия API."),
     responses={
         413: {
             "description": "Payload Too Large (nginx)"
@@ -45,21 +44,14 @@ app = FastAPI(
     ]
 )
 
-origins = [
-    "http://localhost:3000",
-    "https://localhost",
-    "http://ais.ansp.kg",
-    "https://ais.ansp.kg",
-]
-
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
+    expose_headers=["*"]
 )
-
 
 v1 = APIRouter(prefix="/api/v1")
 v1.include_router(users_router)
