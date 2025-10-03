@@ -40,7 +40,8 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - ./nginx/stage.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx/prod.conf:/etc/nginx/conf.d/default.conf
+      - /etc/letsencrypt:/etc/letsencrypt
       - media_uploads:/media
       - eaip_uploads:/eaip
     depends_on:
