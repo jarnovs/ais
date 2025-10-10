@@ -3,7 +3,7 @@ from contextlib import asynccontextmanager
 from fastapi import APIRouter, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from . import media, eaip_issues
+from . import notam, eaip_issues
 
 from app.users.routes import router as users_router
 from app.auth.routes import router as auth_router
@@ -66,7 +66,7 @@ app.add_middleware(
 v1 = APIRouter(prefix="/api/v1")
 v1.include_router(users_router)
 v1.include_router(auth_router)
-v1.include_router(media.router)
+v1.include_router(notam.router)
 v1.include_router(eaip_issues.router)
 app.include_router(v1)
 

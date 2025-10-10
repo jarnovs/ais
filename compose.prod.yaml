@@ -22,7 +22,7 @@ services:
     restart: unless-stopped
     env_file: ".env"
     volumes:
-      - media_uploads:/build/media
+      - notam_uploads:/build/notam
       - eaip_uploads:/build/eaip
     command: bash -c "
       uv run alembic upgrade head &&
@@ -41,7 +41,7 @@ services:
     volumes:
       - ./nginx/prod.conf:/etc/nginx/conf.d/default.conf
       - /etc/letsencrypt:/etc/letsencrypt
-      - media_uploads:/media
+      - notam_uploads:/notam
       - eaip_uploads:/eaip
     depends_on:
       - backend
@@ -63,6 +63,6 @@ services:
     command: ["npm", "run", "start"]
     
 volumes:
-  media_uploads:
+  notam_uploads:
   eaip_uploads:
   pg_data:

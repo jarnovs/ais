@@ -10,5 +10,5 @@ class AbstractConfig(BaseSettings):
 
 class BaseConfig(AbstractConfig):
     DATABASE_URL: str = (
-        "postgresql+asyncpg://postgres:postgres@localhost:5432/database"
+        "postgresql+asyncpg://postgres:FMsDsXfPoDQr1@localhost:5432/database"
     )

@@ -10,10 +10,10 @@ from .config import UPLOAD_DIR, CHUNKS_SIZE
 from .service import check_file_extension
 
 
-router = APIRouter(tags=["Media"])
+router = APIRouter(tags=["Notam"])
 
 
-@router.post("/media", response_model=FileRead)
+@router.post("/notam", response_model=FileRead)
 async def upload_file(user: AuthUserDep, file: UploadFile = File(...)):
     if not user:
         raise NotAuthenticated
