@@ -1,13 +1,5 @@
-import Navbar from "@/widgets/eaip/navbar";
-import Hero from "@/widgets/eaip/hero";
-import IssuesCards from "@/widgets/eaip/issues";
+import History from "@/app/history/page";
 
 export default function Home() {
-  return (
-    <div>
-      <Navbar />
-      <Hero />
-      <IssuesCards />
-    </div>
-  );
+  return <History />;
 }
