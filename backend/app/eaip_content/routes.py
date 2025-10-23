@@ -11,10 +11,10 @@ from app.core import SessionDep
 from app.eaip_issues import EAIPIssue, UPLOAD_DIR
 
 
-router = APIRouter(tags=["EditIssues"])
+router = APIRouter(tags=["EaipContent"])
 
 
-@router.patch("/edit_issues/{id}")
+@router.patch("/eaip_content/{id}")
 async def update_issue(id: int, session: SessionDep, edit_data: EditIssueRead):
     issue = await session.get(EAIPIssue, id)
     if not issue:
