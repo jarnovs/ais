@@ -14,6 +14,7 @@ import { Issue } from "@/lib/api/issues"
 import DeleteIssueButton from "./delete-issue-button"
 import EditUserButton from "./edit-issue-button"
 import { useIssuesStore } from "@/store/issues-store"
+import EditEaipContentButton from "./edit-eaip-content-button"
 
 const IssuesTable = () => {
   const { issues, loading, error, fetchIssues } = useIssuesStore()
@@ -55,6 +56,7 @@ const IssuesTable = () => {
                 <TableCell>{issue.folder}</TableCell>
                 <TableCell className="text-right">
                   <EditUserButton {...issue} />
+                  <EditEaipContentButton issueId={issue.id} />
                   <DeleteIssueButton issueId={issue.id} />
                 </TableCell>
               </TableRow>
