@@ -14,20 +14,15 @@ from .repository import UserRepository
 
 class UserService(AuthModelService):
     def __init__(
-        self,
-        repo: Annotated[UserRepository, Depends()],
-        auth_user: AuthUserDep
+        self, repo: Annotated[UserRepository, Depends()], auth_user: AuthUserDep
     ):
         super().__init__(repo, auth_user)
 
     async def create(self, data: UserInitCreate):
         await self.require_auth()
         if await self.repo.get_by_name(data.name):
-            raise SchemaException([
-                SchemaError(loc="body.name", msg="Имя занято")
-            ])
-        obj = UserCreate(name=data.name,
-                         password_hash=data.password)
+            raise SchemaException([SchemaError(loc="body.name", msg="Имя занято")])
+        obj = UserCreate(name=data.name, password_hash=data.password)
         return await super().create(obj)
 
     async def read(self, obj_id: int):
@@ -40,17 +35,15 @@ class UserService(AuthModelService):
         found_name = await self.repo.get_by_name(data.name)
         if data.name is not Unset and found_name:
             if found_name.id != obj_id:
-                raise SchemaException([
-                    SchemaError(loc="body.name", msg="Название уже существует")
-                ])
+                raise SchemaException([SchemaError(loc="body.name", msg="Имя занято")])
 
         update = UserUpdate()
         for field in data.model_fields_set:
             if field == "password":
-                setattr(update, "password_hash", getattr(data, field))
+                setattr(update, "password_hash", hash_password(getattr(data, field)))
                 continue
             setattr(update, field, getattr(data, field))
-        return await self.repo.update(obj_id, update)
+        return await super().update(obj_id, update)
 
     async def delete(self, obj_id):
         await self.require_auth()
