@@ -1,37 +1,42 @@
 import os
 import aiofiles
+
+from datetime import date
+from sqlalchemy import select
 from zipfile import ZipFile, BadZipFile
+from typing import Annotated, Optional
+from fastapi import APIRouter, File, Form, UploadFile, HTTPException
+
+from app.core import SessionDep
+
 from .config import UPLOAD_DIR, CHUNKS_SIZE
 from .service import check_file_extension, delete_tmp, delete_dir
 from .exceptions import NotOneFolderError, FolderNameExistError, FileIsNotZipError
 from .schemas import EAIPIssueRead
-from fastapi import APIRouter, File, Form, UploadFile, HTTPException
-from sqlalchemy import select
-from typing import Annotated, Optional
-from datetime import date
-from app.core import SessionDep
 from .models import EAIPIssue, EAIPStatus
+
 
 router = APIRouter(tags=["EAIPIssues"])
 
-@router.post("/eaip_issues/",response_model=EAIPIssueRead)
+
+@router.post("/eaip_issues/", response_model=EAIPIssueRead)
 async def create_issue(
     session: SessionDep,
     effective_date: date = Form(...),
     publication_date: date = Form(...),
     reason_for_change: str = Form(...),
     status: EAIPStatus = Form(...),
-    file: UploadFile = File(...)
+    file: UploadFile = File(...),
 ):
     ###
     ext = await check_file_extension(file.filename)
-    
+
     foldername = f"{effective_date}-AIRAC"
     final_dir = UPLOAD_DIR / foldername
     tmp_dir = UPLOAD_DIR / f"{foldername}.tmp"
     zip_file = UPLOAD_DIR / f"{foldername}{ext}"
 
-    async with aiofiles.open(zip_file, 'wb') as out_file:
+    async with aiofiles.open(zip_file, "wb") as out_file:
         while chunk := await file.read(CHUNKS_SIZE):
             await out_file.write(chunk)
     # Unzip
@@ -41,10 +46,10 @@ async def create_issue(
     except BadZipFile:
         await delete_tmp(tmp_dir, zip_file)
         raise FileIsNotZipError
-    
+
     # Validate if one folder inside zip
     subfolders = [folder.path for folder in os.scandir(tmp_dir) if folder.is_dir()]
-    if len(subfolders) != 1: 
+    if len(subfolders) != 1:
         await delete_tmp(tmp_dir, zip_file)
         raise NotOneFolderError
 
@@ -54,21 +59,22 @@ async def create_issue(
         os.rename(folder, final_dir)
     except:
         await delete_tmp(tmp_dir, zip_file)
-        raise FolderNameExistError 
-    
+        raise FolderNameExistError
+
     await delete_tmp(tmp_dir, zip_file)
     #####
 
     data = EAIPIssue(
-            effective_date=effective_date,
-            publication_date=publication_date,
-            reason_for_change=reason_for_change,
-            status=status,
-            folder=foldername)
+        effective_date=effective_date,
+        publication_date=publication_date,
+        reason_for_change=reason_for_change,
+        status=status,
+        folder=foldername,
+    )
     session.add(data)
     await session.commit()
     await session.refresh(data)
-    return data 
+    return data
 
 
 @router.get("/eaip_issues/", response_model=list[EAIPIssueRead])
@@ -97,16 +103,16 @@ async def update_issue(
     publication_date: Optional[date] = Form(None),
     reason_for_change: Optional[str] = Form(None),
     status: Optional[EAIPStatus] = Form(None),
-    file: Optional[UploadFile] = File(None)
+    file: Optional[UploadFile] = File(None),
 ):
     issue = await session.get(EAIPIssue, id)
     if not issue:
         raise HTTPException(status_code=404, detail="Issue not found")
-    
+
     if effective_date is not None:
         old_folder_dir = UPLOAD_DIR / issue.folder
         foldername = f"{effective_date}-AIRAC"
-        new_folder_dir = UPLOAD_DIR / foldername 
+        new_folder_dir = UPLOAD_DIR / foldername
         try:
             os.rename(old_folder_dir, new_folder_dir)
             issue.folder = foldername
@@ -125,12 +131,12 @@ async def update_issue(
 
     if file is not None:
         ext = await check_file_extension(file.filename)
-        foldername = issue.folder 
+        foldername = issue.folder
         final_dir = UPLOAD_DIR / foldername
         tmp_dir = UPLOAD_DIR / f"{foldername}.tmp"
         zip_file = UPLOAD_DIR / f"{foldername}{ext}"
 
-        async with aiofiles.open(zip_file, 'wb') as out_file:
+        async with aiofiles.open(zip_file, "wb") as out_file:
             while chunk := await file.read(CHUNKS_SIZE):
                 await out_file.write(chunk)
         # Unzip
@@ -140,10 +146,10 @@ async def update_issue(
         except BadZipFile:
             await delete_tmp(tmp_dir, zip_file)
             raise FileIsNotZipError
-        
+
         # Validate if one folder inside zip
         subfolders = [folder.path for folder in os.scandir(tmp_dir) if folder.is_dir()]
-        if len(subfolders) != 1: 
+        if len(subfolders) != 1:
             await delete_tmp(tmp_dir, zip_file)
             raise NotOneFolderError
 
@@ -154,10 +160,9 @@ async def update_issue(
             os.rename(folder, final_dir)
         except:
             await delete_tmp(tmp_dir, zip_file)
-            raise FolderNameExistError 
-        
-        await delete_tmp(tmp_dir, zip_file)
+            raise FolderNameExistError
 
+        await delete_tmp(tmp_dir, zip_file)
 
     session.add(issue)
     await session.commit()

@@ -46,7 +46,7 @@ async def delete_file(user: AuthUserDep, filename: str):
 
     filepath = UPLOAD_DIR / filename
     if not filepath.exists():
-        return {"error": "File not found"}
+        return {"error": "Файл не найден"}
 
     os.remove(filepath)
     return FileRead(file=filename)

@@ -4,5 +4,5 @@ from .config import ALLOWED_FILE_EXTENSIONS
 
 
 FileNotValidError = HTTPException(
-    HTTP_400_BAD_REQUEST, f"File extension not allowed. Use: {ALLOWED_FILE_EXTENSIONS}"
+    HTTP_400_BAD_REQUEST, f"Недопустимый тип файла. Используйте: {ALLOWED_FILE_EXTENSIONS}"
 )
