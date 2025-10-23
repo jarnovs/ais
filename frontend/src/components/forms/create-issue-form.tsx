@@ -25,7 +25,7 @@ import { useIssuesStore } from "@/store/issues-store"
 const CreateIssueFormSchema = z.object({
   effective_date: z.string().min(1, "Дата вступления в силу обязательна"),
   publication_date: z.string().min(1, "Дата публикации обязательна"),
-  reason_for_change: z.string().min(1, "Причина изменения обязательна"),
+  reason_for_change: z.string().min(1, "Номер поправки обязателен"),
   status: z.enum(["active", "future", "archived", "hidden"]),
   file: z.instanceof(File),
 })
@@ -113,9 +113,9 @@ export function CreateIssueForm() {
           name="reason_for_change"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Причина изменения</FormLabel>
+              <FormLabel>Номер поправки</FormLabel>
               <FormControl>
-                <Input placeholder="Введите причину изменения" {...field} />
+                <Input placeholder="Введите номер поправки" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

@@ -100,7 +100,7 @@ export function UpdateIssueForm(issue: any) {
           name="publication_date"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Дата публикации</FormLabel>
+              <FormLabel>Номер поправки</FormLabel>
               <FormControl>
                 <Input type="date" {...field} />
               </FormControl>
@@ -114,9 +114,9 @@ export function UpdateIssueForm(issue: any) {
           name="reason_for_change"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Причина изменения</FormLabel>
+              <FormLabel>Номер поправки</FormLabel>
               <FormControl>
-                <Input placeholder="Введите причину изменения" {...field} />
+                <Input placeholder="Введите номер поправки" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
